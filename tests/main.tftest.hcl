@@ -4,7 +4,7 @@ run "test_web_app_deploy" {
   # Test the availability_zone is in lower case and one of a, b, and c.
   assert {
     condition = alltrue([
-      for zone in local.availability_zones : contains(local.default_availability_zones, zone)
+      for zone in local.availability_zones : contains(["a", "b", "c"], zone)
     ])
     error_message = "availability_zone should be a, b or c in lowercase"
   }
