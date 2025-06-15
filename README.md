@@ -23,14 +23,16 @@ DevOps Challenge June 2025.
 - **Module** - The infrastructure built in a local module. Then the module has been called in the root.
 
 ### 🖥️ Resources Defined In The Module
-- EC2 instance (Amazon Linux 2) With User data script to serve a static HTML file via Apache:
+- EC2 instance (Amazon Linux 2) With User data script to serve a static HTML file via Apache.
+- The module supports multi availability zones.
 
 ```terraform
  resource "aws_instance" "web_app" {
+  count             = length(var.availability_zones)
   ami               = var.ami_id
   instance_type     = var.instance_type
-  availability_zone = local.availability_zone
-  subnet_id         = aws_default_subnet.default_subnet.id
+  availability_zone = "${var.aws_region}${var.availability_zones[count.index]}"
+  subnet_id         = aws_default_subnet.default_subnet[count.index].id
 
   user_data = templatefile("${path.module}/scripts/user_data.sh.tpl", {
     htmlPage = file(var.html_file_path)
@@ -48,7 +50,6 @@ DevOps Challenge June 2025.
  resource "aws_security_group" "web_app_sg" {
   name        = var.sg_name
   description = var.sg_description
-  vpc_id      = aws_default_subnet.default_subnet.vpc_id
 
   dynamic "ingress" {
     for_each = var.ingress
@@ -59,6 +60,16 @@ DevOps Challenge June 2025.
       cidr_blocks = ingress.value["cidr_blocks"]
     }
   }
+
+  dynamic "egress" {
+    for_each = var.egress
+    content {
+      from_port   = egress.value["from_port"]
+      to_port     = egress.value["to_port"]
+      protocol    = egress.value["protocol"]
+      cidr_blocks = egress.value["cidr_blocks"]
+    }
+  }
  }
 
 ```
@@ -66,7 +77,8 @@ DevOps Challenge June 2025.
 
 ```terraform
  resource "aws_default_subnet" "default_subnet" {
-  availability_zone = local.availability_zone
+  count             = length(var.availability_zones)
+  availability_zone = "${var.aws_region}${var.availability_zones[count.index]}"
 
   tags = var.subnet_tags
 }
@@ -80,7 +92,7 @@ DevOps Challenge June 2025.
 
   # AMI Resources Arguments
   ami_id            = "..."
-  availability_zone = "..."
+  availability_zones = ["..."]
   html_file_path    = "..."
 
   ami_tags = {
@@ -110,14 +122,18 @@ DevOps Challenge June 2025.
 
   # Test the availability_zone is in lower case and one of a, b, and c.
   assert {
-    condition     = contains(["a", "b", "c"], local.availability_zone)
+    condition = alltrue([
+      for zone in local.availability_zones : contains(local.default_availability_zones, zone)
+    ])
     error_message = "availability_zone should be a, b or c in lowercase"
   }
 
 
   # Test the public_ip output of the module.
   assert {
-    condition     = strcontains(module.deploy_web_app.web_app_public_ip, ".")
+    condition = alltrue([
+      for ip in module.deploy_web_app.web_app_public_ip : strcontains(ip, ".")
+    ])
     error_message = "Public IP output is not valid"
   }
 }

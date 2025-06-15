@@ -15,12 +15,16 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-variable "availability_zone" {
-  type        = string
-  description = "Availability Zone, a, b or c"
+variable "availability_zones" {
+  type        = list(string)
+  description = "Multiple Availability Zones ['a', 'b', 'c'] In Lowercase"
+  default     = []
+
   validation {
-    condition     = contains(local.availability_zones, var.availability_zone)
-    error_message = "The Value Should Be a, b, or c in lowercase"
+    condition = alltrue([
+      for zone in var.availability_zones : contains(local.default_availability_zones, zone)
+    ])
+    error_message = "You Should Set var.enable_multi_availability_zone To Be True and the selected zones should contain a, b, c in lowercases"
   }
 }
 

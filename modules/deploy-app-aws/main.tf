@@ -1,9 +1,10 @@
 # AWS Instance
 resource "aws_instance" "web_app" {
+  count             = length(var.availability_zones)
   ami               = var.ami_id
   instance_type     = var.instance_type
-  availability_zone = local.availability_zone
-  subnet_id         = aws_default_subnet.default_subnet.id
+  availability_zone = "${var.aws_region}${var.availability_zones[count.index]}"
+  subnet_id         = aws_default_subnet.default_subnet[count.index].id
 
   user_data = templatefile("${path.module}/scripts/user_data.sh.tpl", {
     htmlPage = file(var.html_file_path)
@@ -18,7 +19,6 @@ resource "aws_instance" "web_app" {
 resource "aws_security_group" "web_app_sg" {
   name        = var.sg_name
   description = var.sg_description
-  vpc_id      = aws_default_subnet.default_subnet.vpc_id
 
   dynamic "ingress" {
     for_each = var.ingress
@@ -43,7 +43,8 @@ resource "aws_security_group" "web_app_sg" {
 
 # Default Subnet
 resource "aws_default_subnet" "default_subnet" {
-  availability_zone = local.availability_zone
+  count             = length(var.availability_zones)
+  availability_zone = "${var.aws_region}${var.availability_zones[count.index]}"
 
   tags = var.subnet_tags
 }

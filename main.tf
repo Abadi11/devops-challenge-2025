@@ -2,9 +2,9 @@ module "deploy_web_app" {
   source = "./modules/deploy-app-aws"
 
   # AMI Resources Arguments
-  ami_id            = local.ami_id
-  availability_zone = local.availability_zone
-  html_file_path    = "${path.module}/index.html"
+  ami_id             = local.ami_id
+  availability_zones = local.availability_zones
+  html_file_path     = "${path.module}/index.html"
 
   ami_tags = {
     provider = "aws"
