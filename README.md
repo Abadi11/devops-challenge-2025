@@ -19,8 +19,8 @@ DevOps Challenge June 2025.
 - **User Data Script:** Automatically installs Apache and deploys a static `index.html`. 
 
 ## 🔧 Infrastructure Tool
-**Terraform** – Used for defining reproducible, version-controlled infrastructure.
-**Module** - The infrastructure built in a local module. Then the module has been called in the root.
+- **Terraform** – Used for defining reproducible, version-controlled infrastructure.
+- **Module** - The infrastructure built in a local module. Then the module has been called in the root.
 
 ### 🖥️ Resources Defined In The Module
 - EC2 instance (Amazon Linux 2) With User data script to serve a static HTML file via Apache:

@@ -29,8 +29,7 @@ It includes the following stages:
 This workflow performs a test using terraform test packages:
 
 - Initializes Terraform.
-- Applies the infrastructure.
-- Destroys all resources to avoid cost.
+- Test the infrastructure.
 
 ## 📄 `tflint.yml`
 
@@ -44,4 +43,4 @@ It includes the following stages:
 
 ### 2. **Terraform Validation**
 - Runs `tflint --init` to easily install the plugins.
-- Executes `tflint -f compact` to use the compact output format in readable way and one-line issue.
+- Executes `tflint -f compact` to use the compact output format in readable way and one-line issue print out.
