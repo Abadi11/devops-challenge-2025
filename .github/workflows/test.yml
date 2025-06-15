@@ -26,11 +26,6 @@ jobs:
         key: terraform-${{ runner.os }}-${{ hashFiles('**/*.tf') }}
         restore-keys: terraform-${{ runner.os }}-
 
-    - name: Export the secrets
-      run: |
-          export $AWS_ACCESS_KEY_ID
-          export $AWS_SECRET_ACCESS_KEY
-
     - name: Terraform fmt
       run: terraform fmt -check
 
