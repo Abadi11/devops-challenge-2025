@@ -24,7 +24,7 @@ variable "availability_zones" {
     condition = alltrue([
       for zone in var.availability_zones : contains(local.default_availability_zones, zone)
     ])
-    error_message = "You Should Set var.enable_multi_availability_zone To Be True and the selected zones should contain a, b, c in lowercases"
+    error_message = "The selected zones should contain a, b, c in lowercases"
   }
 }
 
