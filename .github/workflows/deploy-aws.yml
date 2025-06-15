@@ -41,9 +41,9 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4.2.1
       with:
-        aws-region: ${{env.AWS_REGION}}
-        aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
     
     - name: Terraform fmt
       run: terraform fmt -check
@@ -55,9 +55,11 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
+      if: ${{ !inputs.destroy }}
       run: terraform plan
 
     - name: Terraform Apply
+      if: ${{ !inputs.destroy }}
       run: terraform apply -auto-approve
 
     - name: Terraform Output
@@ -94,9 +96,9 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4.2.1
       with:
-        aws-region: ${{env.AWS_REGION}}
-        aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
     - name: Terraform fmt
       run: terraform fmt -check
@@ -108,9 +110,11 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
+      if: ${{ !inputs.destroy }}
       run: terraform plan
 
     - name: Terraform Apply
+      if: ${{ !inputs.destroy }}
       run: terraform apply -auto-approve 
 
     - name: Terraform Output
