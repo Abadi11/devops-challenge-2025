@@ -1,0 +1,33 @@
+name: Terraform Lint - tflint
+on:
+  push:
+  pull_request:
+
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      name: Checkout source code
+
+    - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 #v4.2.3
+      name: Cache plugin dir
+      with:
+        path: ~/.tflint.d/plugins
+        key: tflint-${{ runner.os }}-${{ hashFiles('.tflint.hcl') }}
+        restore-keys: tflint-${{ runner.os }}-
+
+    - uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6 #v4.1.1
+      name: Setup TFLint
+      with:
+        tflint_version: latest
+
+    - name: Show version
+      run: tflint --version
+
+    - name: Init TFLint
+      run: tflint --init
+
+    - name: Run TFLint
+      run: tflint -f compact

@@ -404,3 +404,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Terraform
+.terraform.lock.hcl
+.terraform/
