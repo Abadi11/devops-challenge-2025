@@ -63,6 +63,7 @@ jobs:
       run: terraform apply -auto-approve
 
     - name: Terraform Output
+      if: ${{ !inputs.destroy }}
       run: terraform output
 
     - name: Terraform Destroy
@@ -118,6 +119,7 @@ jobs:
       run: terraform apply -auto-approve 
 
     - name: Terraform Output
+      if: ${{ !inputs.destroy }}
       run: terraform output
 
     - name: Terraform Destroy
