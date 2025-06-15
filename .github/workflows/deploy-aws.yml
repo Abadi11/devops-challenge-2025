@@ -36,6 +36,14 @@ jobs:
         key: terraform-${{ runner.os }}-${{ hashFiles('**/*.tf') }}
         restore-keys: terraform-${{ runner.os }}-
 
+    # Provides AWS credentials to Terraform
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4.2.1
+      with:
+        aws-region: $AWS_REGION
+        aws-access-key-id: $AWS_ACCESS_KEY_ID
+        aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+    
     - name: Terraform fmt
       run: terraform fmt -check
 
@@ -79,6 +87,14 @@ jobs:
           .terraform/modules
         key: terraform-${{ runner.os }}-${{ hashFiles('**/*.tf') }}
         restore-keys: terraform-${{ runner.os }}-
+
+    # Provides AWS credentials to Terraform
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4.2.1
+      with:
+        aws-region: $AWS_REGION
+        aws-access-key-id: $AWS_ACCESS_KEY_ID
+        aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
 
     - name: Terraform fmt
       run: terraform fmt -check
