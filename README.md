@@ -1,4 +1,4 @@
-# DevOps Challenge 2025 – AWS + Terraform + GitHub Actions
+# 💪 DevOps Challenge 2025 – AWS + Terraform + GitHub Actions
 
 DevOps Challenge June 2025.
 
